@@ -1,8 +1,6 @@
 package main.tools;
 
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 import org.designwizard.api.DesignWizard;
@@ -15,50 +13,71 @@ public class MutualAssociationChecker {
 		this.dw = dw;
 	}
 
-	public Set<String[]> getMutualAssociationClasses() {
-		Set<String[]> mutualAssociationClasses = new HashSet<>();
+	public Set<Set<ClassNode>> getMutualAssociationClasses() {
+		Set<Set<ClassNode>> mutualAssociationClasses = new HashSet<>();
 		
-		if (this.dw != null) {
-			Map<ClassNode, Set<ClassNode>> associations = getAllClassAssociations(dw.getAllClasses());
-			for(Map.Entry<ClassNode, Set<ClassNode>> entry : associations.entrySet()) {
-				System.out.println(entry.getKey().getShortName() + " chama as seguintes classes: ");
-				for (ClassNode callee : entry.getValue()) {
-					System.out.println(callee.getShortName());
-				}
-				System.out.println("============================================================");
-			}
-		}
+		if (this.dw != null)
+			mutualAssociationClasses = getAllCircularDependencies();
 		
 		return mutualAssociationClasses;
 	}
 
-	private Map<ClassNode, Set<ClassNode>> getAllClassAssociations(Set<ClassNode> allClasses) {
-		Map<ClassNode, Set<ClassNode>> mapClasses = new HashMap<>();
+	private Set<Set<ClassNode>> getAllCircularDependencies() {
+		Set<Set<ClassNode>> setDependencies = new HashSet<>();
 		
-		for (ClassNode classNode: allClasses) {
-			for (ClassNode calleeClass : classNode.getCalleeClasses()) {
-				
-				if (existsInProject(calleeClass, allClasses) && !classNode.equals(calleeClass)){
-					insertIntoMap(classNode, calleeClass, mapClasses);
-				}
+		for (ClassNode classNode: this.dw.getAllClasses()) {
+			Set<ClassNode> callees = getCallees(classNode);
+			Set<ClassNode> callers = getCallers(classNode);
+			
+			Set<ClassNode> intersection = intersectionBetweenSets(callees, callers);
+			
+			if (!intersection.isEmpty()) {
+				setDependencies.add(intersection);
 			}
 		}
 		
-		return mapClasses;
+		return setDependencies;
 	}
-
-	private void insertIntoMap(ClassNode classNode, ClassNode calleeClass, Map<ClassNode, Set<ClassNode>> mapClasses) {
-		Set<ClassNode> calleeSet = new HashSet<>();
+	
+	private Set<ClassNode> getCallees(ClassNode classNode) {
+		Set<ClassNode> callees = new HashSet<>();
 		
-		if (mapClasses.containsKey(classNode)) {
-			calleeSet = mapClasses.get(classNode);
+		for (ClassNode calleeClass : classNode.getCalleeClasses()) {
+			
+			if (existsInDesign(calleeClass) && !classNode.equals(calleeClass)){
+				callees.add(calleeClass);
+			}
 		}
 		
-		calleeSet.add(calleeClass);
-		mapClasses.put(classNode, calleeSet);
+		return callees;
 	}
 
-	private boolean existsInProject(ClassNode classNode, Set<ClassNode> allClasses) {
-		return allClasses.contains(classNode);
+	private Set<ClassNode> getCallers(ClassNode classNode) {
+		Set<ClassNode> callers = new HashSet<>();
+		
+		for (ClassNode callerClass : classNode.getCallerClasses()) {
+			
+			if (existsInDesign(callerClass) && !classNode.equals(callerClass)) {
+				callers.add(callerClass);
+			}
+		}
+		
+		return callers;
 	}
+
+	private boolean existsInDesign(ClassNode classNode) {
+		return this.dw.getAllClasses().contains(classNode);
+	}
+	
+	private <T> Set<T> intersectionBetweenSets(Set<T> setA, Set<T> setB) {
+        Set<T> setC = new HashSet<>();
+        
+        for (T element : setA) {
+        	
+            if (setB.contains(element)) {
+                setC.add(element);
+            }
+        }
+        return setC;
+    }
 }
