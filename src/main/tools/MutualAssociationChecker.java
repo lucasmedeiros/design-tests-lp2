@@ -6,6 +6,8 @@ import java.util.Set;
 import org.designwizard.api.DesignWizard;
 import org.designwizard.design.ClassNode;
 
+import util.Util;
+
 public class MutualAssociationChecker {
 	private DesignWizard dw;
 
@@ -29,7 +31,7 @@ public class MutualAssociationChecker {
 			Set<ClassNode> callees = getCallees(classNode);
 			Set<ClassNode> callers = getCallers(classNode);
 			
-			Set<ClassNode> intersection = intersectionBetweenSets(callees, callers);
+			Set<ClassNode> intersection = Util.intersectionBetweenSets(callees, callers);
 			
 			if (!intersection.isEmpty()) {
 				setDependencies.add(intersection);
@@ -68,16 +70,4 @@ public class MutualAssociationChecker {
 	private boolean existsInDesign(ClassNode classNode) {
 		return this.dw.getAllClasses().contains(classNode);
 	}
-	
-	private <T> Set<T> intersectionBetweenSets(Set<T> setA, Set<T> setB) {
-        Set<T> setC = new HashSet<>();
-        
-        for (T element : setA) {
-        	
-            if (setB.contains(element)) {
-                setC.add(element);
-            }
-        }
-        return setC;
-    }
 }
