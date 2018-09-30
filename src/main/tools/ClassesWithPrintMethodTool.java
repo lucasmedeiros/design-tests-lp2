@@ -7,13 +7,13 @@ import org.designwizard.api.DesignWizard;
 import org.designwizard.design.ClassNode;
 import org.designwizard.design.MethodNode;
 
-public class PrintChecker {
+public class ClassesWithPrintMethodTool {
 
 	private static final String PRINTLN_METHOD = "println(java.lang.String)";
 	private static final String PRINT_METHOD = "print(java.lang.String)";
 	private DesignWizard dw;
 
-	public PrintChecker(DesignWizard dw) {
+	public ClassesWithPrintMethodTool(DesignWizard dw) {
 		this.dw = dw;
 	}
 

@@ -8,10 +8,10 @@ import org.designwizard.design.ClassNode;
 
 import util.Util;
 
-public class MutualAssociationChecker {
+public class MutualAssociationTool {
 	private DesignWizard dw;
 
-	public MutualAssociationChecker(DesignWizard dw) {
+	public MutualAssociationTool(DesignWizard dw) {
 		this.dw = dw;
 	}
 
