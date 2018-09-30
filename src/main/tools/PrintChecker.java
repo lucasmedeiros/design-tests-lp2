@@ -28,18 +28,26 @@ public class PrintChecker {
 
 	private Set<ClassNode> getAllClassesWithPrintMethods() {
 		Set<ClassNode> classes = new HashSet<>();
-		
+
 		for (ClassNode cn : dw.getAllClasses()) {
 			for (MethodNode mn : cn.getAllMethods()) {
-				for (MethodNode callee : mn.getCalleeMethods()) {
-					if (callee.getShortName().equals(PRINTLN_METHOD) 
-							|| callee.getShortName().equals(PRINT_METHOD)) {
-						classes.add(cn);
-					}
-				}
+				if (methodContainsPrintMethod(mn))
+					classes.add(cn);
 			}
 		}
-		
+
 		return classes;
+	}
+
+	private boolean methodContainsPrintMethod(MethodNode methodNode) {
+
+		for (MethodNode calleeMethod : methodNode.getCalleeMethods()) {
+			if (calleeMethod.getShortName().equals(PRINT_METHOD)
+					|| calleeMethod.getShortName().equals(PRINTLN_METHOD)) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 }
