@@ -31,6 +31,11 @@ public class RelationsTool {
 		return relations;
 	}
 
+	/**
+	 * Method that gets all existing relations in project.
+	 * 
+	 * @return map with caller class as key and a set of its callee classes as value
+	 */
 	private Map<ClassNode, Set<ClassNode>> getAllRelations() {
 		Map<ClassNode, Set<ClassNode>> relations = new HashMap<>();
 
@@ -42,6 +47,12 @@ public class RelationsTool {
 		return relations;
 	}
 
+	/**
+	 * Method that gets all callees from a class.
+	 * 
+	 * @param classNode class to get all callee methods
+	 * @return set with callee classes.
+	 */
 	private Set<ClassNode> getCallees(ClassNode classNode) {
 		Set<ClassNode> callees = new HashSet<>();
 
@@ -55,6 +66,13 @@ public class RelationsTool {
 		return callees;
 	}
 
+	/**
+	 * Method that checks if a class is in the project's design. This prevents returning
+	 * java.lang classes for example, or inner classes.
+	 * 
+	 * @param classNode class to check if it's in design
+	 * @return true if it exists, false otherwise.
+	 */
 	private boolean existsInDesign(ClassNode classNode) {
 		return this.dw.getAllClasses().contains(classNode);
 	}
