@@ -5,7 +5,6 @@ import java.util.Set;
 
 import org.designwizard.api.DesignWizard;
 import org.designwizard.design.ClassNode;
-import org.designwizard.design.FieldNode;
 import org.designwizard.design.MethodNode;
 
 public abstract class AbstractCouplingMetric implements CouplingMetric {
