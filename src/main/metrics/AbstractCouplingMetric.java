@@ -25,6 +25,11 @@ public abstract class AbstractCouplingMetric implements CouplingMetric {
 
 		return parameters;
 	}
+	
+	protected boolean isNewRelatedClass(ClassNode classNode, ClassNode newClass) {
+		return newClass != null && !newClass.equals(classNode) && !OBJECT_CLASS_NAME.equals(newClass.getClassName())
+				&& existsInProjectDesign(newClass);
+	}
 
 	private boolean existsInProjectDesign(ClassNode classNode) {
 		return getAllClasses().contains(classNode);
@@ -35,10 +40,5 @@ public abstract class AbstractCouplingMetric implements CouplingMetric {
 			return new HashSet<>();
 		}
 		return dw.getAllClasses();
-	}
-
-	protected boolean isNewRelatedClass(ClassNode classNode, ClassNode newClass) {
-		return newClass != null && !newClass.equals(classNode) && !OBJECT_CLASS_NAME.equals(newClass.getClassName())
-				&& existsInProjectDesign(newClass);
 	}
 }
