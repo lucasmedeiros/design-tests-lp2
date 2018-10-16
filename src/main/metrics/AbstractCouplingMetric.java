@@ -7,7 +7,7 @@ import org.designwizard.api.DesignWizard;
 import org.designwizard.design.ClassNode;
 import org.designwizard.design.MethodNode;
 
-public abstract class AbstractCouplingMetric implements CouplingMetric {
+public abstract class AbstractCouplingMetric implements Metric {
 
 	private DesignWizard dw;
 	private static final String OBJECT_CLASS_NAME = "java.lang.Object";
