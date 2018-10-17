@@ -13,7 +13,7 @@ public class Coupling {
 		this.efferent = new EfferentCouplingMetric(dw);
 	}
 	
-	public double instability(ClassNode classNode) {
+	public double getInstability(ClassNode classNode) {
 		double ca = (double) getAfferentCoupling(classNode);
 		double ce = (double) getEfferentCoupling(classNode);
 		double instability = 0.0;
