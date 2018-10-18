@@ -14,6 +14,18 @@ public class Coupling {
 	}
 	
 	public double getInstability(ClassNode classNode) {
+		return calculateInstability(classNode);
+	}
+
+	public int getAfferentCoupling(ClassNode classNode) {
+		return this.afferent.calculate(classNode);
+	}
+	
+	public int getEfferentCoupling(ClassNode classNode) {
+		return this.efferent.calculate(classNode);
+	}
+	
+	private double calculateInstability(ClassNode classNode) {
 		double ca = (double) getAfferentCoupling(classNode);
 		double ce = (double) getEfferentCoupling(classNode);
 		double instability = 0.0;
@@ -22,13 +34,5 @@ public class Coupling {
 			instability = ce / (ce + ca);
 		
 		return instability;
-	}
-	
-	public int getAfferentCoupling(ClassNode classNode) {
-		return this.afferent.calculate(classNode);
-	}
-	
-	public int getEfferentCoupling(ClassNode classNode) {
-		return this.efferent.calculate(classNode);
 	}
 }
