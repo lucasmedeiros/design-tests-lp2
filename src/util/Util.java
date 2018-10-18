@@ -23,4 +23,20 @@ public class Util {
         }
         return setC;
     }
+	
+	/**
+	 * Generic method that allows obtaining the union of two given sets.
+	 * 
+	 * @param setA first set given.
+	 * @param setB second set given.
+	 * @return a third set with all elements contained in two sets.
+	 */
+	public static <T> Set<T> unionBetweenSets(Set<T> setA, Set<T> setB) {
+		Set<T> setC = new HashSet<>();
+		
+		setC.addAll(setA);
+		setC.addAll(setB);
+		
+		return setC;
+	}
 }
