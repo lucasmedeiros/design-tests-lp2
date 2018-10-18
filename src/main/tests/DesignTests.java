@@ -12,7 +12,7 @@ public class DesignTests extends TestCase {
 
 	public DesignTests() {
 		try {
-			this.dw = new DesignWizard("jars/campominado.jar");
+			this.dw = new DesignWizard("jars/lab5.jar");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -21,14 +21,11 @@ public class DesignTests extends TestCase {
 
 	public void testPrintlnMethods() {
 		ClassesWithPrintMethodTool printlnMethsTool = new ClassesWithPrintMethodTool(dw);
-		assertEquals(1, printlnMethsTool.getClassesWithPrintMethods().size());
+		assertTrue(printlnMethsTool.getClassesWithPrintMethods().size() <= 1);
 	}
 	
 	public void testMutualAssociation() {
 		MutualAssociationTool mutualAssocTool = new MutualAssociationTool(dw);
 		assertEquals(0, mutualAssocTool.getMutualAssociationClasses().size());
 	}
-	
-	
-
 }
