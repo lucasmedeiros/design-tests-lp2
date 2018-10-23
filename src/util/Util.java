@@ -13,14 +13,10 @@ public class Util {
 	 * @return a third set with all elements in common between two sets.
 	 */
 	public static <T> Set<T> intersectionBetweenSets(Set<T> setA, Set<T> setB) {
-        Set<T> setC = new HashSet<>();
+        Set<T> setC = new HashSet<>(setA);
+        setC.retainAll(setB);
         
-        for (T element : setA) {
-        	
-            if (setB.contains(element)) {
-                setC.add(element);
-            }
-        }
+        
         return setC;
     }
 	
