@@ -16,7 +16,6 @@ public class Util {
         Set<T> setC = new HashSet<>(setA);
         setC.retainAll(setB);
         
-        
         return setC;
     }
 	
@@ -28,10 +27,24 @@ public class Util {
 	 * @return a third set with all elements contained in two sets.
 	 */
 	public static <T> Set<T> unionBetweenSets(Set<T> setA, Set<T> setB) {
-		Set<T> setC = new HashSet<>();
+		Set<T> setC = new HashSet<>(setA);
 		
-		setC.addAll(setA);
 		setC.addAll(setB);
+		
+		return setC;
+	}
+	
+	/**
+	 * Generic method that allows obtaining the difference of two given sets.
+	 * 
+	 * @param setA first set given.
+	 * @param setB second set given.
+	 * @return a third set with the difference between both sets.
+	 */
+	public static <T> Set<T> differenceBetweenSets(Set<T> setA, Set<T> setB) {
+		Set<T> setC = new HashSet<>(setA);
+		
+		setC.removeAll(setB);
 		
 		return setC;
 	}
