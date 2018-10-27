@@ -1,6 +1,5 @@
 package main.metrics;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -10,11 +9,15 @@ import org.designwizard.design.ClassNode;
 import org.designwizard.design.FieldNode;
 import org.designwizard.design.MethodNode;
 
+import util.Util;
+
 public class LCOMMetric implements Metric {
 
 	private static final String CONSTRUCTOR_METHOD_NAME = "<init>";
+	private static final int MIN_NUMBER_COMPONENTS = 1;
 
-	public LCOMMetric() {}
+	public LCOMMetric() {
+	}
 
 	@Override
 	public int calculate(ClassNode classNode) {
@@ -29,49 +32,51 @@ public class LCOMMetric implements Metric {
 
 			if (!fields.isEmpty()) {
 				Map<FieldNode, Set<MethodNode>> relations = getFieldConnectedMethods(fields, classNode);
-//				Set<Set<MethodNode>> components = getComponents(relations);
-//				numberOfComponents = components.size();
-				
-				numberOfComponents = calculateNumberOfComponents(relations);
+
+				numberOfComponents = calculateNumberOfComponents(fields, relations);
 			}
 		}
 
 		return numberOfComponents;
 	}
 
-	private int calculateNumberOfComponents(Map<FieldNode, Set<MethodNode>> relations) {
+	private int calculateNumberOfComponents(Set<FieldNode> fields, Map<FieldNode, Set<MethodNode>> relations) {
 		int numberOfComponents = 1;
-		
-		for (Set<MethodNode> values : relations.values()) {
-			boolean encontrou = false;
-			int cont = 0;
-			for (Set<MethodNode> values2 : relations.values()) {
-				if (!values.equals(values2) &&
-						!Collections.disjoint(values, values2)) {
-					encontrou = true;
-					break;
+
+		if (fields.size() > 1) {
+			for (FieldNode fn : fields) {
+				int maxNumber = numberOfComponents + 1;
+				for (FieldNode fn2 : fields) {
+					if (!fn.equals(fn2)) {
+						Set<MethodNode> intersection = Util.intersectionBetweenSets(relations.get(fn),
+								relations.get(fn2));
+
+						if (intersection.isEmpty()) {
+							numberOfComponents++;
+							numberOfComponents = Math.min(numberOfComponents, maxNumber);
+						} else {
+							numberOfComponents = Math.max(numberOfComponents - 1, MIN_NUMBER_COMPONENTS);
+							break;
+						}
+					} else {
+						break;
+					}
 				}
-				cont++;
-				numberOfComponents++;
-			}
-			if (encontrou) {
-				numberOfComponents -= cont;
 			}
 		}
-		
+
 		return numberOfComponents;
 	}
 
 	public Set<Set<MethodNode>> getComponents(Map<FieldNode, Set<MethodNode>> relations) {
- 		Set<Set<MethodNode>> components = new HashSet<>();
- 		
- 		// TODO get all components...
-		
+		Set<Set<MethodNode>> components = new HashSet<>();
+
+		// TODO get all components...
+
 		return components;
 	}
 
-	private Map<FieldNode, Set<MethodNode>> getFieldConnectedMethods(Set<FieldNode> fields,
-			ClassNode classNode) {
+	private Map<FieldNode, Set<MethodNode>> getFieldConnectedMethods(Set<FieldNode> fields, ClassNode classNode) {
 		Map<FieldNode, Set<MethodNode>> fieldRelations = new HashMap<>();
 
 		for (FieldNode field : fields) {
